@@ -62,6 +62,16 @@ public class Warehouse {
         return Optional.empty();
     }
 
+    public ProductRecord[] getProductsBy(Category category) {
+        List<ProductRecord> output = new ArrayList<>();
+        for (ProductRecord product : products) {
+            if (product.category().equals(category)) {
+                output.add(product);
+            }
+        }
+        return output.toArray(new ProductRecord[0]);
+    }
+
 
 }
 
