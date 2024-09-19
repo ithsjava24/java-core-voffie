@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class Warehouse {
-    private final List<ProductRecord> products = new ArrayList<>();
     private final String name;
     private final static Map<String, Warehouse> instances = new HashMap<>();
+    private final List<ProductRecord> products = new ArrayList<>();
 
     private Warehouse() {
         this.name = "Default";
@@ -72,6 +72,18 @@ public class Warehouse {
         return output.toArray(new ProductRecord[0]);
     }
 
-
+    public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
+        Map<Category, List<ProductRecord>> output = new HashMap<>();
+        for (ProductRecord product : products) {
+            if (!output.containsKey(product.category())) {
+                output.put(product.category(), List.of(product));
+            } else {
+                List<ProductRecord> list = output.get(product.category());
+                list.add(product);
+                output.put(product.category(), list);
+            }
+        }
+        return output;
+    }
 }
 
