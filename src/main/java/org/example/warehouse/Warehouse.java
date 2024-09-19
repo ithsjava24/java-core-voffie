@@ -53,5 +53,15 @@ public class Warehouse {
         return List.copyOf(products);
     }
 
+    public Optional<ProductRecord> getProductById(UUID uuid) {
+        for (ProductRecord product : products) {
+            if (product.uuid().equals(uuid)) {
+                return Optional.of(product);
+            }
+        }
+        return Optional.empty();
+    }
+
+
 }
 
