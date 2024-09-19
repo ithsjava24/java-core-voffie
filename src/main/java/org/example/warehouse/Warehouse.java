@@ -49,5 +49,9 @@ public class Warehouse {
         return products.getLast();
     }
 
+    public List<ProductRecord> getProducts() {
+        return List.copyOf(products);
+    }
+
 }
 
