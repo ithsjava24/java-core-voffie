@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class Warehouse {
+    private final List<ProductRecord> products = new ArrayList<>();
     private final String name;
     private final static Map<String, Warehouse> instances = new HashMap<>();
 
@@ -27,6 +28,10 @@ public class Warehouse {
             instances.put(name, warehouse);
             return warehouse;
         }
+    }
+
+    public boolean isEmpty() {
+        return products.isEmpty();
     }
 }
 
