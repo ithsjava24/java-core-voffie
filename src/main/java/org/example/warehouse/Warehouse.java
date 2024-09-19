@@ -90,5 +90,17 @@ public class Warehouse {
     public ProductRecord[] getChangedProducts() {
         return changedProducts.toArray(new ProductRecord[0]);
     }
+
+    public void updateProductPrice(UUID uuid, BigDecimal price) {
+        for (int i = 0; i < products.size(); i++) {
+            ProductRecord product = products.get(i);
+            if (product.uuid().equals(uuid)) {
+                changedProducts.add(products.get(i));
+                products.set(i, new ProductRecord(product.uuid(), product.name(), product.category(), price));
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Product with that id doesn't exist.");
+    }
 }
 
