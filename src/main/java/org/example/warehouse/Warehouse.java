@@ -7,6 +7,7 @@ public class Warehouse {
     private final String name;
     private final static Map<String, Warehouse> instances = new HashMap<>();
     private final List<ProductRecord> products = new ArrayList<>();
+    private final List<ProductRecord> changedProducts = new ArrayList<>();
 
     private Warehouse() {
         this.name = "Default";
@@ -84,6 +85,10 @@ public class Warehouse {
             }
         }
         return output;
+    }
+
+    public ProductRecord[] getChangedProducts() {
+        return changedProducts.toArray(new ProductRecord[0]);
     }
 }
 
