@@ -38,8 +38,7 @@ public class Warehouse {
     public ProductRecord addProduct(UUID id, String name, Category category, BigDecimal price) {
         if (name == null || name.isEmpty()) throw new IllegalArgumentException("Product name can't be null or empty.");
         if (category == null) throw new IllegalArgumentException("Category can't be null.");
-
-        if (id == null) id = UUID.randomUUID();
+        id = Objects.requireNonNullElse(id, UUID.randomUUID());
 
         for (ProductRecord product : products) {
             if (id.equals(product.uuid()))
