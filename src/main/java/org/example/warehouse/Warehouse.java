@@ -62,14 +62,14 @@ public class Warehouse {
         return Optional.empty();
     }
 
-    public ProductRecord[] getProductsBy(Category category) {
+    public List<ProductRecord> getProductsBy(Category category) {
         List<ProductRecord> output = new ArrayList<>();
         for (ProductRecord product : products) {
             if (product.category().equals(category)) {
                 output.add(product);
             }
         }
-        return output.toArray(new ProductRecord[0]);
+        return output;
     }
 
     public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
@@ -86,8 +86,8 @@ public class Warehouse {
         return output;
     }
 
-    public ProductRecord[] getChangedProducts() {
-        return changedProducts.toArray(new ProductRecord[0]);
+    public List<ProductRecord> getChangedProducts() {
+        return changedProducts;
     }
 
     public void updateProductPrice(UUID uuid, BigDecimal price) {
