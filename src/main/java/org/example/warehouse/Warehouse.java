@@ -9,16 +9,12 @@ public class Warehouse {
     private final List<ProductRecord> products = new ArrayList<>();
     private final List<ProductRecord> changedProducts = new ArrayList<>();
 
-    private Warehouse() {
-        this.name = "Default";
-    }
-
     private Warehouse(String name) {
         this.name = name;
     }
 
     public static Warehouse getInstance() {
-        return new Warehouse();
+        return new Warehouse("Default");
     }
 
     public static Warehouse getInstance(String name) {
