@@ -40,10 +40,11 @@ public class Warehouse {
         if (category == null) throw new IllegalArgumentException("Category can't be null.");
         id = Objects.requireNonNullElse(id, UUID.randomUUID());
 
-        for (ProductRecord product : products) {
-            if (id.equals(product.uuid()))
-                throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
-        }
+        UUID finalId = id;
+        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(finalId)).toList();
+
+        if (!filteredProducts.isEmpty())
+            throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
 
         products.add(new ProductRecord(id, name, category, Objects.requireNonNullElse(price, BigDecimal.ZERO)));
         return products.getLast();
@@ -54,22 +55,14 @@ public class Warehouse {
     }
 
     public Optional<ProductRecord> getProductById(UUID uuid) {
-        for (ProductRecord product : products) {
-            if (product.uuid().equals(uuid)) {
-                return Optional.of(product);
-            }
-        }
-        return Optional.empty();
+        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(uuid)).toList();
+        if (filteredProducts.isEmpty()) return Optional.empty();
+        return Optional.of(filteredProducts.getFirst());
+
     }
 
     public List<ProductRecord> getProductsBy(Category category) {
-        List<ProductRecord> output = new ArrayList<>();
-        for (ProductRecord product : products) {
-            if (product.category().equals(category)) {
-                output.add(product);
-            }
-        }
-        return output;
+        return products.stream().filter(product -> product.category().equals(category)).toList();
     }
 
     public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
@@ -91,15 +84,20 @@ public class Warehouse {
     }
 
     public void updateProductPrice(UUID uuid, BigDecimal price) {
-        for (int i = 0; i < products.size(); i++) {
-            ProductRecord product = products.get(i);
-            if (product.uuid().equals(uuid)) {
-                changedProducts.add(products.get(i));
-                products.set(i, new ProductRecord(product.uuid(), product.name(), product.category(), price));
-                return;
-            }
+        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(uuid)).toList();
+
+        if (filteredProducts.isEmpty()) {
+            throw new IllegalArgumentException("Product with that id doesn't exist.");
         }
-        throw new IllegalArgumentException("Product with that id doesn't exist.");
+
+        ProductRecord product = filteredProducts.getFirst();
+        changedProducts.add(product);
+        products.set(products.indexOf(product),
+                new ProductRecord(product.uuid(),
+                        product.name(),
+                        product.category(),
+                        price
+                ));
     }
 }
 
