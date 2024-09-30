@@ -2,6 +2,7 @@ package org.example.warehouse;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Warehouse {
     private final String name;
@@ -62,17 +63,7 @@ public class Warehouse {
     }
 
     public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
-        Map<Category, List<ProductRecord>> output = new HashMap<>();
-        for (ProductRecord product : products) {
-            if (!output.containsKey(product.category())) {
-                output.put(product.category(), List.of(product));
-            } else {
-                List<ProductRecord> list = output.get(product.category());
-                list.add(product);
-                output.put(product.category(), list);
-            }
-        }
-        return output;
+        return products.stream().collect(Collectors.groupingBy(ProductRecord::category));
     }
 
     public List<ProductRecord> getChangedProducts() {
