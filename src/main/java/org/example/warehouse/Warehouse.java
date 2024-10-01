@@ -37,7 +37,7 @@ public class Warehouse {
         if (category == null) throw new IllegalArgumentException("Category can't be null.");
         id = Objects.requireNonNullElse(id, UUID.randomUUID());
 
-        UUID finalId = id;
+        final UUID finalId = id;
         List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(finalId)).toList();
 
         if (!filteredProducts.isEmpty())
