@@ -67,7 +67,7 @@ public class Warehouse {
     }
 
     public List<ProductRecord> getChangedProducts() {
-        return changedProducts;
+        return List.copyOf(changedProducts);
     }
 
     public void updateProductPrice(UUID uuid, BigDecimal price) {
