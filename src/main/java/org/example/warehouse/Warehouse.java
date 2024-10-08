@@ -1,6 +1,7 @@
 package org.example.warehouse;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,7 +9,6 @@ public class Warehouse {
     private final String name;
     private final static Map<String, Warehouse> instances = new HashMap<>();
     private final List<ProductRecord> products = new ArrayList<>();
-    private final List<ProductRecord> changedProducts = new ArrayList<>();
 
     private Warehouse(String name) {
         this.name = name;
@@ -43,7 +43,7 @@ public class Warehouse {
         if (!filteredProducts.isEmpty())
             throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
 
-        products.add(new ProductRecord(id, name, category, Objects.requireNonNullElse(price, BigDecimal.ZERO)));
+        products.add(new ProductRecord(id, name, category, Objects.requireNonNullElse(price, BigDecimal.ZERO), null));
         return products.getLast();
     }
 
@@ -67,7 +67,9 @@ public class Warehouse {
     }
 
     public List<ProductRecord> getChangedProducts() {
-        return List.copyOf(changedProducts);
+        return products.stream().filter(product -> product.updatedAt() != null).toList();
+        //List<ProductRecord> filteredProducts = products.stream().filter(product -> product.updatedAt() != null).toList();
+        //return filteredProducts;
     }
 
     public void updateProductPrice(UUID uuid, BigDecimal price) {
@@ -78,13 +80,14 @@ public class Warehouse {
         }
 
         ProductRecord product = filteredProducts.getFirst();
-        changedProducts.add(product);
+        ProductRecord updatedProduct = new ProductRecord(product.uuid(),
+                product.name(),
+                product.category(),
+                price,
+                LocalDateTime.now()
+        );
         products.set(products.indexOf(product),
-                new ProductRecord(product.uuid(),
-                        product.name(),
-                        product.category(),
-                        price
-                ));
+                updatedProduct);
     }
 }
 
