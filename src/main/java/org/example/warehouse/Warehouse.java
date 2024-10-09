@@ -66,8 +66,6 @@ public class Warehouse {
 
     public List<ProductRecord> getChangedProducts() {
         return products.stream().filter(product -> product.updatedAt() != null).toList();
-        //List<ProductRecord> filteredProducts = products.stream().filter(product -> product.updatedAt() != null).toList();
-        //return filteredProducts;
     }
 
     public void updateProductPrice(UUID id, BigDecimal price) {
