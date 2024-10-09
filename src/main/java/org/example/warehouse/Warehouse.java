@@ -49,8 +49,8 @@ public class Warehouse {
         return List.copyOf(products);
     }
 
-    public Optional<ProductRecord> getProductById(UUID uuid) {
-        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(uuid)).toList();
+    public Optional<ProductRecord> getProductById(UUID id) {
+        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(id)).toList();
         if (filteredProducts.isEmpty()) return Optional.empty();
         return Optional.of(filteredProducts.getFirst());
 
