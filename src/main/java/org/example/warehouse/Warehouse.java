@@ -38,12 +38,10 @@ public class Warehouse {
         id = Objects.requireNonNullElse(id, UUID.randomUUID());
 
         final UUID finalId = id;
-        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(finalId)).toList();
-
-        if (!filteredProducts.isEmpty())
+        getProductById(finalId).ifPresentOrElse(_ -> {
             throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
+        }, () -> products.add(new ProductRecord(finalId, name, category, Objects.requireNonNullElse(price, BigDecimal.ZERO), null)));
 
-        products.add(new ProductRecord(id, name, category, Objects.requireNonNullElse(price, BigDecimal.ZERO), null));
         return products.getLast();
     }
 
@@ -72,22 +70,17 @@ public class Warehouse {
         //return filteredProducts;
     }
 
-    public void updateProductPrice(UUID uuid, BigDecimal price) {
-        List<ProductRecord> filteredProducts = products.stream().filter(product -> product.uuid().equals(uuid)).toList();
-
-        if (filteredProducts.isEmpty()) {
+    public void updateProductPrice(UUID id, BigDecimal price) {
+        getProductById(id).ifPresentOrElse(product ->
+            products.set(products.indexOf(product),
+                    new ProductRecord(product.uuid(),
+                            product.name(),
+                            product.category(),
+                            price,
+                            LocalDateTime.now()))
+        , () -> {
             throw new IllegalArgumentException("Product with that id doesn't exist.");
-        }
-
-        ProductRecord product = filteredProducts.getFirst();
-        ProductRecord updatedProduct = new ProductRecord(product.uuid(),
-                product.name(),
-                product.category(),
-                price,
-                LocalDateTime.now()
-        );
-        products.set(products.indexOf(product),
-                updatedProduct);
+        });
     }
 }
 
