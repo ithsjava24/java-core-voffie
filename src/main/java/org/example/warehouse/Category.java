@@ -2,7 +2,7 @@ package org.example.warehouse;
 
 import java.util.*;
 
-public class Category {
+public final class Category {
     private final String name;
     private final static Map<String, Category> instances = new HashMap<>();
 

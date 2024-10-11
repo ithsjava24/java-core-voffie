@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Warehouse {
+public final class Warehouse {
     private final String name;
     private final static Map<String, Warehouse> instances = new HashMap<>();
     private final List<ProductRecord> products = new ArrayList<>();
@@ -70,15 +70,14 @@ public class Warehouse {
 
     public void updateProductPrice(UUID id, BigDecimal price) {
         getProductById(id).ifPresentOrElse(product ->
-            products.set(products.indexOf(product),
-                    new ProductRecord(product.uuid(),
-                            product.name(),
-                            product.category(),
-                            price,
-                            LocalDateTime.now()))
-        , () -> {
-            throw new IllegalArgumentException("Product with that id doesn't exist.");
-        });
+                        products.set(products.indexOf(product),
+                                new ProductRecord(product.uuid(),
+                                        product.name(),
+                                        product.category(),
+                                        price,
+                                        LocalDateTime.now()))
+                , () -> {
+                    throw new IllegalArgumentException("Product with that id doesn't exist.");
+                });
     }
 }
-
